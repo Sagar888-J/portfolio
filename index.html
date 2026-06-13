@@ -36,6 +36,18 @@
           <li><a href="#projects">Projects</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
+        <div class="theme-switcher">
+          <button class="theme-btn">
+            <i class="fas fa-palette"></i>
+          </button>
+
+          <div class="theme-menu">
+            <button data-theme="dark">🌑 Dark</button>
+            <button data-theme="medium">🌗 Medium</button>
+            <button data-theme="light">☀️ Light</button>
+          </div>
+        </div>
+
         <div class="mobile-menu-btn">
           <i class="fas fa-bars"></i>
         </div>
@@ -121,17 +133,15 @@
             </div>
             <div class="about-stats">
               <div class="stat-card glass-panel">
-                <h3 class="counter" data-target="2">0</h3>
+                <h3 class="counter" data-target="2" data-plus="true">0</h3>
                 <p>Years Experience</p>
               </div>
               <div class="stat-card glass-panel">
-                <h3 class="counter" data-target="20">0</h3>
-                <span>+</span>
+                <h3 class="counter" data-target="20" data-plus="true">0</h3>
                 <p>Projects Completed</p>
               </div>
               <div class="stat-card glass-panel">
-                <h3 class="counter" data-target="15">0</h3>
-                <span>+</span>
+                <h3 class="counter" data-target="15" data-plus="true">0</h3>
                 <p>Happy Clients</p>
               </div>
             </div>
@@ -364,7 +374,7 @@
       <section id="contact" class="contact section-padding">
         <div class="container">
           <h2 class="section-title">Get In <span>Touch</span></h2>
-          <div class="contact-wrapper">
+          <div class="contact-wrapper single-contact">
             <div class="contact-info glass-panel">
               <h3>Let's talk about your project!</h3>
               <p>
@@ -373,6 +383,13 @@
               </p>
 
               <div class="contact-details">
+                <div class="contact-item">
+                  <i class="fas fa-phone"></i>
+                  <div>
+                    <h4>Phone</h4>
+                    <p>+91 78887 65928</p>
+                  </div>
+                </div>
                 <div class="contact-item">
                   <i class="fas fa-envelope"></i>
                   <div>
@@ -400,39 +417,6 @@
                 ></a>
               </div>
             </div>
-
-            <form id="contactForm" class="contact-form glass-panel">
-              <div class="form-group">
-                <input type="text" id="name" required placeholder="Your Name" />
-              </div>
-              <div class="form-group">
-                <input
-                  type="email"
-                  id="email"
-                  required
-                  placeholder="Your Email"
-                />
-              </div>
-              <div class="form-group">
-                <input
-                  type="text"
-                  id="subject"
-                  required
-                  placeholder="Subject"
-                />
-              </div>
-              <div class="form-group">
-                <textarea
-                  id="message"
-                  rows="5"
-                  required
-                  placeholder="Your Message"
-                ></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary btn-block">
-                Send Message <i class="fas fa-paper-plane"></i>
-              </button>
-            </form>
           </div>
         </div>
       </section>
