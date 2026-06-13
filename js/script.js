@@ -1,51 +1,48 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // --- Theme Switcher ---
-  const themeBtn = document.querySelector(".theme-btn");
-  const themeMenu = document.querySelector(".theme-menu");
-  const themeOptions = document.querySelectorAll(".theme-menu button");
+  // --- Theme Cycle Switcher ---
+  const themeBtn = document.getElementById("themeToggle");
 
-  // Toggle dropdown
-  if (themeBtn) {
-    themeBtn.addEventListener("click", () => {
-      themeMenu.classList.toggle("active");
-    });
-  }
+  const themes = [
+    {
+      name: "dark",
+      icon: "🌑",
+    },
+    {
+      name: "medium",
+      icon: "🌗",
+    },
+    {
+      name: "light",
+      icon: "☀️",
+    },
+  ];
 
-  // Change theme
-  themeOptions.forEach((option) => {
-    option.addEventListener("click", () => {
-      const selectedTheme = option.getAttribute("data-theme");
+  let currentTheme = localStorage.getItem("theme") || "dark";
 
-      document.body.classList.remove(
-        "dark-theme",
-        "medium-theme",
-        "light-theme",
-      );
+  function applyTheme(theme) {
+    document.body.classList.remove("medium-theme", "light-theme");
 
-      if (selectedTheme !== "dark") {
-        document.body.classList.add(`${selectedTheme}-theme`);
-      }
-
-      localStorage.setItem("theme", selectedTheme);
-
-      themeMenu.classList.remove("active");
-    });
-  });
-
-  // Load saved theme
-  const savedTheme = localStorage.getItem("theme") || "dark";
-
-  document.body.classList.remove("dark-theme", "medium-theme", "light-theme");
-
-  if (savedTheme !== "dark") {
-    document.body.classList.add(`${savedTheme}-theme`);
-  }
-
-  // Close theme menu when clicking outside
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".theme-switcher")) {
-      themeMenu.classList.remove("active");
+    if (theme !== "dark") {
+      document.body.classList.add(`${theme}-theme`);
     }
+
+    const themeData = themes.find((t) => t.name === theme);
+
+    themeBtn.textContent = themeData.icon;
+
+    localStorage.setItem("theme", theme);
+  }
+
+  applyTheme(currentTheme);
+
+  themeBtn.addEventListener("click", () => {
+    let index = themes.findIndex((t) => t.name === currentTheme);
+
+    index = (index + 1) % themes.length;
+
+    currentTheme = themes[index].name;
+
+    applyTheme(currentTheme);
   });
 
   // --- Mobile Menu Toggle ---
@@ -154,12 +151,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (entry.isIntersecting) {
         entry.target.classList.add("appear");
 
-        // Trigger counters if they are in this section
-        const counters = entry.target.querySelectorAll(".counter");
-        if (counters.length > 0) {
-          runCounters(counters);
-        }
-
         observer.unobserve(entry.target);
       }
     });
@@ -174,36 +165,48 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   // --- Animated Counters ---
-  let countersRun = false;
+  // --- Animated Counters ---
+  const counters = document.querySelectorAll(".counter");
 
-  function runCounters(counters) {
-    if (countersRun) return;
+  const counterObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const counter = entry.target;
 
-    counters.forEach((counter) => {
-      const target = parseInt(counter.dataset.target);
-      const hasPlus = counter.dataset.plus === "true";
+          const target = parseInt(counter.dataset.target);
+          const hasPlus = counter.dataset.plus === "true";
 
-      let current = 0;
-      const duration = 2000;
-      const increment = target / (duration / 16);
+          let current = 0;
 
-      const updateCounter = () => {
-        current += increment;
+          const updateCounter = () => {
+            const increment = target / 80;
 
-        if (current < target) {
-          counter.textContent = Math.ceil(current) + (hasPlus ? "+" : "");
+            current += increment;
 
-          requestAnimationFrame(updateCounter);
-        } else {
-          counter.textContent = target + (hasPlus ? "+" : "");
+            if (current < target) {
+              counter.textContent = Math.ceil(current) + (hasPlus ? "+" : "");
+
+              requestAnimationFrame(updateCounter);
+            } else {
+              counter.textContent = target + (hasPlus ? "+" : "");
+            }
+          };
+
+          updateCounter();
+
+          counterObserver.unobserve(counter);
         }
-      };
+      });
+    },
+    {
+      threshold: 0.6,
+    },
+  );
 
-      updateCounter();
-    });
-
-    countersRun = true;
-  }
+  counters.forEach((counter) => {
+    counterObserver.observe(counter);
+  });
 
   // --- Project Filtering ---
   const filterBtns = document.querySelectorAll(".filter-btn");
