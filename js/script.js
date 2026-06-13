@@ -45,6 +45,79 @@ document.addEventListener("DOMContentLoaded", () => {
     applyTheme(currentTheme);
   });
 
+  // ==============================
+  // Project Preview Modal
+  // ==============================
+
+  const previewButtons = document.querySelectorAll(".preview-btn");
+  const projectModal = document.querySelector(".project-modal");
+  const modalClose = document.querySelector(".modal-close");
+
+  const modalTitle = document.querySelector(".modal-title");
+  const modalImage = document.querySelector(".modal-image");
+  const modalLink = document.querySelector(".modal-link");
+  const modalTags = document.querySelector(".modal-tags");
+
+  // Open Modal
+  previewButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const title = button.dataset.title;
+      const image = button.dataset.image;
+      const link = button.dataset.link;
+      const tags = button.dataset.tags.split(",");
+
+      // Update modal content
+      modalTitle.textContent = title;
+
+      modalImage.src = image;
+      modalImage.alt = title;
+
+      modalLink.href = link;
+
+      // Clear old tags
+      modalTags.innerHTML = "";
+
+      // Add tags dynamically
+      tags.forEach((tag) => {
+        const span = document.createElement("span");
+
+        span.textContent = tag.trim();
+
+        modalTags.appendChild(span);
+      });
+
+      // Open modal
+      projectModal.classList.add("active");
+
+      // Prevent background scrolling
+      document.body.style.overflow = "hidden";
+    });
+  });
+
+  // Close Function
+  function closeProjectModal() {
+    projectModal.classList.remove("active");
+
+    document.body.style.overflow = "";
+  }
+
+  // Close using X button
+  modalClose.addEventListener("click", closeProjectModal);
+
+  // Close by clicking outside content
+  projectModal.addEventListener("click", (e) => {
+    if (e.target === projectModal) {
+      closeProjectModal();
+    }
+  });
+
+  // Close using ESC key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && projectModal.classList.contains("active")) {
+      closeProjectModal();
+    }
+  });
+
   // --- Mobile Menu Toggle ---
   const mobileBtn = document.querySelector(".mobile-menu-btn");
   const navLinks = document.querySelector(".nav-links");
@@ -103,10 +176,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Typing Effect ---
   const typingText = document.querySelector(".typing-text");
   const roles = [
-    "Web Developer",
-    "WordPress Expert",
-    "Vue.js Specialist",
-    "CRM Integrator",
+    "Modern Web Applications",
+    "Business Automations",
+    "Custom CRM Solutions",
+    "AI Powered Integrations",
   ];
   let roleIndex = 0;
   let charIndex = 0;
